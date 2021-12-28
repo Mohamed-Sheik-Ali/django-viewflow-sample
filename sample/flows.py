@@ -37,6 +37,15 @@ class HelloWorldFlow(Flow):
     )
 
     awaiting_sign_C = (
+        flow.View(
+            UpdateProcessView,
+            fields=["approved"]
+        ).Permission(
+            auto_create=True,
+        ).Next(this.Close)
+    )
+
+    Close = (
         flow.If(lambda activation: activation.process.approved)
         .Then(this.send)
         .Else(this.end)
